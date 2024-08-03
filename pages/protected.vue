@@ -20,7 +20,7 @@
 <script setup>
 
 definePageMeta({
-    middleware: 'authenticaded'
+    middleware: 'auth'
 })
 
 const { auth } = useSupabaseClient()
@@ -30,7 +30,7 @@ const logout = async () => {
     if(error){
         console.log(error.message);
     }else{
-        navigateTo('/login')
+        navigateTo('/')
     }
 }
  
