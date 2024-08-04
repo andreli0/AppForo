@@ -77,6 +77,7 @@ watch(() => props.hash_login, () => {
 
 const cerrar = () => {
     state.modal_login.hide()
+    limpiar()
 }
 
 const login = async () => {
@@ -90,6 +91,14 @@ const login = async () => {
         show_success.value = true
         reloadNuxtApp()
     }
+}
+
+const limpiar = () => {
+    credentials.email = ""
+    credentials.password = ""
+    show_success.value = false
+    show_error.value = false
+    error_msg.value = ""
 }
 
 

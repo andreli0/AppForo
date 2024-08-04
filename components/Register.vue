@@ -85,6 +85,7 @@ watch(() => props.hash_register, () => {
 
 const cerrar = () => {
     state.modal_register.hide()
+    limpiar()
 }
 
 const register = async () => {
@@ -98,6 +99,14 @@ const register = async () => {
         show_success.value = true
         reloadNuxtApp()
     }
+}
+const limpiar = () => {
+    credentials.email = ""
+    credentials.password = ""
+    credentials.options.data.username = ""
+    show_success.value = false
+    show_error.value = false
+    error_msg.value = ""
 }
 
 
