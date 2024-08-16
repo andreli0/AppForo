@@ -22,8 +22,9 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-12">
-                                <button type="submit" class="btn btn-success w-100">
-                                    <i class="bi bi-box-arrow-right"></i> Iniciar Sesión
+                                <button type="submit" class="btn btn-success w-100" :disabled="loading">
+                                    <span class="bi bi-box-arrow-right" v-show="!loading"></span> 
+                                    <span class="spinner-border spinner-border-sm" v-show="loading"></span> Iniciar Sesión
                                 </button>
                         </div>
                         <div class="row mt-3">
@@ -63,6 +64,7 @@ const credentials = reactive({
     email: '',
     password: ''
 })
+const loading = ref(false)
 
 
 onMounted(() => {
@@ -81,11 +83,14 @@ const cerrar = () => {
 }
 
 const login = async () => {
+    loading.value = true
     const {error} = await auth.signInWithPassword(credentials); 
     if(error){
+        loading.value = false
         error_msg.value = error.message
         show_error.value = true
     }else{
+        loading.value = false
         error_msg.value = ""
         show_error.value = false
         show_success.value = true
