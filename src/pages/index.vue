@@ -1,13 +1,6 @@
 <template>
-    <div class="container-fluid">
-        <div class="row p-2">
-            <div class="col-lg-auto border-end">
-                <LeftSidebar /> 
-            </div>
-            <div class="col-lg-auto">
-                main
-            </div>
-        </div>
+    <div class="flex p-2 justify-center">
+        <PostCard community_name="nombre_comunidad" time="hace 50min." title="titulo" content="contenido" /> 
     </div>
 </template>
 

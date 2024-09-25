@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" id="loginmodal">
+    <!-- <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" id="loginmodal">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
             <div class="modal-header">
@@ -47,12 +47,56 @@
             </div>
             </div>
         </div>
-    </div>
+    </div> -->
+    <v-dialog :activator="btnLogin" :max-width="mobile ? 'auto': '550'">
+          <template v-slot:default="{ isActive }">
+            <v-card>
+                <v-card-title class="d-flex align-center">
+                    <span class="">Iniciar Sesion</span>
+                    <v-spacer></v-spacer>
+                    <v-btn variant="text" icon="mdi-close" @click="isActive.value = false; limpiar()"></v-btn>
+                </v-card-title>
+            <v-card-text>
+                <v-form @submit.prevent="login">
+                <v-text-field
+                    label="Correo electronico"
+                    prepend-inner-icon="mdi-at"
+                    v-model="credentials.email"
+                    :rules="[rules.required, rules.email]"
+                ></v-text-field>
+                <v-text-field
+                    label="Contraseña"
+                    v-model="credentials.password"
+                    prepend-inner-icon="mdi-lock-outline"
+                    :append-inner-icon="!showPassword ? 'mdi-eye-outline':'mdi-eye-off-outline'"
+                    :type="!showPassword ? 'password' : 'text'"
+                    :rules="[rules.required]"
+                    @click:append-inner="showPassword = !showPassword"
+                ></v-text-field>
+                <v-btn class="mt-6" color="primary" :loading="loading" type="submit" block>Iniciar Sesión</v-btn>
+            </v-form>
+            <v-alert 
+                closable
+                class="mt-3" 
+                :text="error_msg" 
+                type="error" 
+                v-model="show_error" 
+                @click:close="show_error = false"
+            ></v-alert>
+            <v-alert class="mt-3" 
+                type="success" 
+                v-model="show_success">
+                <strong>¡Exito!</strong>: Iniciando sesion
+            </v-alert>
+            </v-card-text>
+
+            </v-card>
+          </template>
+        </v-dialog>
 </template>
 
 <script setup>
-const {$bs} = useNuxtApp()
-const props = defineProps(["hash_login"])
+const props = defineProps(['btnLogin'])
 const state = reactive({
     modal_login: null
 })
@@ -65,22 +109,26 @@ const credentials = reactive({
     password: ''
 })
 const loading = ref(false)
-
-
-onMounted(() => {
-    state.modal_login = new $bs.Modal(document.getElementById("loginmodal"));
+const showPassword = ref(false)
+const rules = reactive({
+    required: (value) => {
+        if (value) {
+            return true
+        }else {
+            return 'Este campo es requerido'
+        }
+    },
+    email: (value) => {
+        if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)){
+            return true
+        }else{
+            return 'Correo electronico no válido'
+        }
+    }
 })
+const isActive = ref(false)
+const {mobile} = useDisplay()
 
-
-
-watch(() => props.hash_login, () => {
-    state.modal_login.show()
-})
-
-const cerrar = () => {
-    state.modal_login.hide()
-    limpiar()
-}
 
 const login = async () => {
     loading.value = true
@@ -105,6 +153,8 @@ const limpiar = () => {
     show_error.value = false
     error_msg.value = ""
 }
+
+
 
 
 
