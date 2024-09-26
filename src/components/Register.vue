@@ -67,7 +67,7 @@
                             label="Nombre de usuario"
                             prepend-inner-icon="mdi-account"
                             v-model="credentials.options.data.username"
-                            :rules="[rules.required]"
+                            :rules="[rules.required, rules.username]"
                         ></v-text-field>
                         <v-text-field
                             label="Correo electrónico"
@@ -125,19 +125,22 @@ const loading = ref(false)
 const {mobile} = useDisplay()
 const show_password = ref(false)
 const rules = reactive({
-    required: (value) => {
-        if (value) {
-            return true
-        }else {
-            return 'Este campo es requerido'
-        }
-    },
-    email: (value) => {
-        if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)){
+    username: (value) => {
+        if (value.length <= 20 && value.length >= 6){
             return true
         }else{
-            return 'Correo electronico no válido'
-        }
+            return value.length >= 6 ? 'El nombre de usuario debe tener un máximo de 20 caracteres' : 'El nombre de usuario debe tener un mínimo de 6 caracteres'
+        }      
+    },
+    required: (value) => {
+        if (value) return true
+
+        return 'Este campo es requerido'
+    },
+    email: (value) => {
+        if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)) return true
+
+        return 'Correo electronico no válido'
     }
 })
 

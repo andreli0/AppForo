@@ -63,18 +63,14 @@ const loading = ref(false)
 const show_password = ref(false)
 const rules = reactive({
     required: (value) => {
-        if (value) {
-            return true
-        }else {
-            return 'Este campo es requerido'
-        }
+        if (value) return true
+
+        return 'Este campo es requerido'
     },
     email: (value) => {
-        if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)){
-            return true
-        }else{
-            return 'Correo electronico no válido'
-        }
+        if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)) return true
+
+        return 'Correo electronico no válido'
     }
 })
 const isActive = ref(false)

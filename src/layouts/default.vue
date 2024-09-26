@@ -7,16 +7,15 @@
 
             <v-app-bar-title>AppForo</v-app-bar-title>
             <v-spacer></v-spacer>
+            <v-btn v-if="user" variant="outlined" prepend-icon="mdi-account">{{user.user_metadata.username}}</v-btn>
             <template v-if="mdAndUp">
                 <template v-if="user">
-                    <v-btn variant="outlined" prepend-icon="mdi-account">{{user.user_metadata.username}}</v-btn>
                     <v-btn type ="button" variant="outlined" prepend-icon="mdi-exit-to-app" class="ml-2" @click.prevent="logout()">Cerrar Sesion</v-btn>
                 </template>
                 <template v-else>                
                     <v-btn  variant="outlined" ref="btnLogin">Iniciar Sesión</v-btn>
                     <v-btn variant="outlined" ref="btnRegister" class="ml-2">Regístrate</v-btn>
                 </template>
-
             </template>
             <template v-else>
                 <v-menu
@@ -25,8 +24,10 @@
                     <template v-slot:activator="{ props }">
                     <v-btn icon="mdi-dots-vertical" variant="text" v-bind="props"></v-btn>
                     </template>
-
-                    <v-list>
+                    <v-list nav v-if="user">
+                        <v-list-item prepend-icon="mdi-exit-to-app" title="Cerrar sesión" @click.prevent="logout()"></v-list-item>
+                    </v-list>
+                    <v-list nav v-else>
                         <v-list-item ref="btnLogin" title="Iniciar Sesión"></v-list-item>
                         <v-list-item ref="btnRegister" title="Registrate"></v-list-item>
                     </v-list>
