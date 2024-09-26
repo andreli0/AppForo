@@ -3,14 +3,14 @@
           <template v-slot:default="{ isActive }">
             <v-card>
                 <v-card-title class="d-flex align-center">
-                    <span class="">Iniciar Sesion</span>
+                    <span class="">Iniciar Sesión</span>
                     <v-spacer></v-spacer>
                     <v-btn variant="text" icon="mdi-close" @click="isActive.value = false; limpiar()"></v-btn>
                 </v-card-title>
             <v-card-text>
             <v-form ref="formLogin">
                 <v-text-field
-                    label="Correo electronico"
+                    label="Correo electrónico"
                     prepend-inner-icon="mdi-at"
                     v-model="credentials.email"
                     :rules="[rules.required, rules.email]"

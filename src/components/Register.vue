@@ -70,7 +70,7 @@
                             :rules="[rules.required]"
                         ></v-text-field>
                         <v-text-field
-                            label="Correo electronico"
+                            label="Correo electrónico"
                             prepend-inner-icon="mdi-at"
                             v-model="credentials.email"
                             :rules="[rules.required, rules.email]"
