@@ -1,53 +1,4 @@
 <template>
-    <!-- <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" id="loginmodal">
-        <div class="modal-dialog modal-md modal-dialog-centered">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-center" id="modalStaticBackdropLabel">Inicia Sesión</h5>
-                <button type="button" class="btn-close" aria-label="Close" v-on:click.prevent="cerrar()"></button>
-            </div>
-            <div class="modal-body">
-                <form v-on:submit.prevent="login()">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label for="loginusuario" class="form-label"><i class="bi bi-at"></i> Correo Electrónico</label>
-                            <input type="mail" class="form-control" id="loginusuario" v-model="credentials.email" required>
-                        </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-12">
-                                <label for="logicontrasena" class="form-label"><i class="bi bi-key"></i> Contraseña</label>
-                                <input type="password" class="form-control" id="logicontrasena" v-model="credentials.password" required>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-12">
-                                <button type="submit" class="btn btn-success w-100" :disabled="loading">
-                                    <span class="bi bi-box-arrow-right" v-show="!loading"></span> 
-                                    <span class="spinner-border spinner-border-sm" v-show="loading"></span> Iniciar Sesión
-                                </button>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-12">
-                                <div class="alert alert-success fade show" role="alert" v-show="show_success">
-                                    <strong>¡Exito!</strong>: Iniciando sesion
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-12">
-                                <div class="alert alert-danger alert-dismissible" role="alert" v-show="show_error">
-                                    <strong>Error: </strong> {{ error_msg }}
-                                    <button type="button" class="btn-close" v-on:click.prevent="show_error = false"></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            </div>
-        </div>
-    </div> -->
     <v-dialog :activator="btnLogin" :max-width="mobile ? 'auto': '550'">
           <template v-slot:default="{ isActive }">
             <v-card>
@@ -57,7 +8,7 @@
                     <v-btn variant="text" icon="mdi-close" @click="isActive.value = false; limpiar()"></v-btn>
                 </v-card-title>
             <v-card-text>
-                <v-form @submit.prevent="login">
+            <v-form ref="formLogin">
                 <v-text-field
                     label="Correo electronico"
                     prepend-inner-icon="mdi-at"
@@ -68,12 +19,12 @@
                     label="Contraseña"
                     v-model="credentials.password"
                     prepend-inner-icon="mdi-lock-outline"
-                    :append-inner-icon="!showPassword ? 'mdi-eye-outline':'mdi-eye-off-outline'"
-                    :type="!showPassword ? 'password' : 'text'"
+                    :append-inner-icon="!show_password ? 'mdi-eye-outline':'mdi-eye-off-outline'"
+                    :type="!show_password ? 'password' : 'text'"
                     :rules="[rules.required]"
-                    @click:append-inner="showPassword = !showPassword"
+                    @click:append-inner="show_password = !show_password"
                 ></v-text-field>
-                <v-btn class="mt-6" color="primary" :loading="loading" type="submit" block>Iniciar Sesión</v-btn>
+                <v-btn class="mt-6" color="primary" :loading="loading" type="submit" @click.prevent="submitForm" block>Iniciar Sesión</v-btn>
             </v-form>
             <v-alert 
                 closable
@@ -109,7 +60,7 @@ const credentials = reactive({
     password: ''
 })
 const loading = ref(false)
-const showPassword = ref(false)
+const show_password = ref(false)
 const rules = reactive({
     required: (value) => {
         if (value) {
@@ -129,6 +80,15 @@ const rules = reactive({
 const isActive = ref(false)
 const {mobile} = useDisplay()
 
+const formLogin = ref()
+
+const submitForm = () => {
+    formLogin.value?.validate().then(({valid: isValid}) => {
+      if(isValid){
+        login()
+      }
+    })
+}
 
 const login = async () => {
     loading.value = true

@@ -1,11 +1,4 @@
 <template>
-    <!-- <div class="card">
-        <div class="card-header">{{ community_name }}{{ time }}<i class="bi bi-three-dots-vertical"></i></div>
-        <div class="card-body">
-            {{ title }}
-            {{ content }}
-        </div>
-    </div> -->
     <v-card class="max-w-[700px] w-full">
         <v-card-title class="d-flex align-center">
           <span >Menu</span>

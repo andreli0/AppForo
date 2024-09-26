@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" id="registermodal">
+    <!-- <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" id="registermodal">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -52,15 +52,62 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
+    <v-dialog :activator="btnRegister" :max-width="mobile ? 'auto': '550'">
+          <template v-slot:default="{ isActive }">
+            <v-card>
+                <v-card-title class="d-flex align-center">
+                    <span class="">Regístrate</span>
+                    <v-spacer></v-spacer>
+                    <v-btn variant="text" icon="mdi-close" @click="isActive.value = false; limpiar()"></v-btn>
+                </v-card-title>
+                <v-card-text>
+                    <v-form ref="formRegister">
+                        <v-text-field
+                            label="Nombre de usuario"
+                            prepend-inner-icon="mdi-account"
+                            v-model="credentials.options.data.username"
+                            :rules="[rules.required]"
+                        ></v-text-field>
+                        <v-text-field
+                            label="Correo electronico"
+                            prepend-inner-icon="mdi-at"
+                            v-model="credentials.email"
+                            :rules="[rules.required, rules.email]"
+                        ></v-text-field>
+                        <v-text-field
+                            label="Contraseña"
+                            v-model="credentials.password"
+                            prepend-inner-icon="mdi-lock-outline"
+                            :append-inner-icon="!show_password ? 'mdi-eye-outline':'mdi-eye-off-outline'"
+                            :type="!show_password ? 'password' : 'text'"
+                            :rules="[rules.required]"
+                            @click:append-inner="show_password = !show_password"
+                        ></v-text-field>
+                        <v-btn class="mt-6" color="primary" :loading="loading" type="submit" @click.prevent="submitForm" block>Registrarte</v-btn>
+                    </v-form>
+                    <v-alert 
+                        closable
+                        class="mt-3" 
+                        :text="error_msg" 
+                        type="error" 
+                        v-model="show_error" 
+                        @click:close="show_error = false"
+                    ></v-alert>
+                    <v-alert class="mt-3" 
+                        type="success" 
+                        v-model="show_success">
+                        <strong>¡Exito!</strong>: Iniciando sesion
+                    </v-alert>
+                </v-card-text>
+            </v-card>
+          </template>
+        </v-dialog>
 </template>
 
 <script setup>
-const {$bs} = useNuxtApp()
-const props = defineProps(["hash_register"])
-const state = reactive({
-    modal_register: null
-})
+const props = defineProps(["btnRegister"])
+
 const {auth} = useSupabaseClient()
 const error_msg = ref("")
 const show_success = ref(false)
@@ -74,26 +121,44 @@ const credentials = reactive({
         }
     }
 })
-
-onMounted(() => {
-    state.modal_register = new $bs.Modal(document.getElementById("registermodal"))
+const loading = ref(false)
+const {mobile} = useDisplay()
+const show_password = ref(false)
+const rules = reactive({
+    required: (value) => {
+        if (value) {
+            return true
+        }else {
+            return 'Este campo es requerido'
+        }
+    },
+    email: (value) => {
+        if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)){
+            return true
+        }else{
+            return 'Correo electronico no válido'
+        }
+    }
 })
 
-watch(() => props.hash_register, () => {
-    state.modal_register.show()
-})
+const formRegister = ref()
 
-const cerrar = () => {
-    state.modal_register.hide()
-    limpiar()
+const submitForm = () => {
+    formRegister.value?.validate().then(({valid: isValid}) => {
+      if(isValid){
+        register()
+      }
+    })
 }
-
 const register = async () => {
+    loading.value = true
     const {error} = await auth.signUp(credentials); 
     if(error){
+        loading.value = false
         error_msg.value = error.message
         show_error.value = true
     }else{
+        loading.value = false
         error_msg.value = ""
         show_error.value = false
         show_success.value = true
