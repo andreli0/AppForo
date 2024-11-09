@@ -1,7 +1,7 @@
 <template>
     <v-card class="max-w-[700px] w-full">
         <v-card-title class="d-flex align-center">
-          <span >Menu</span>
+          <span class="truncate" >{{ title }}</span>
 
           <v-spacer></v-spacer>
 
@@ -16,12 +16,12 @@
                 :key="i"
               >
                 <template v-slot:prepend><v-icon :icon="item.icon"></v-icon></template>
-                <v-list-item-title v-text="item.title"></v-list-item-title>
+                <v-list-item-title :text="item.title"></v-list-item-title>
               </v-list-item>
-            </v-list>
+            </v-list> 
           </v-menu>
         </v-card-title>
-        <v-card-text>Texto de post</v-card-text>
+        <v-card-text>{{ content }}</v-card-text>
         <v-card-actions>
           <v-btn-group density="compact" rounded="pill" variant="tonal">
             <v-btn icon="mdi-arrow-up-bold-outline" size="medium"></v-btn>
