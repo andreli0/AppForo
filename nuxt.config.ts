@@ -3,13 +3,19 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/supabase',
     'vuetify-nuxt-module',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    '@nuxt/eslint',
   ],
-  compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  srcDir: "src/",
+  srcDir: 'src',
+  compatibilityDate: '2024-04-03',
+  eslint: {
+    config: {
+      stylistic: true,
+    },
+  },
   supabase: {
-    redirect: false
+    redirect: false,
   },
   vuetify: {
     moduleOptions: {
@@ -21,12 +27,12 @@ export default defineNuxtConfig({
         themes: {
           dark: {
             dark: false,
-            colors:{
-              primary: '#3F51B5'
-            }
-          }
-        }
-      }
-    }
-  }
+            colors: {
+              primary: '#3F51B5',
+            },
+          },
+        },
+      },
+    },
+  },
 })
