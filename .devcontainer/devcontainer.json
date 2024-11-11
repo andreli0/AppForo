@@ -12,7 +12,8 @@
 		"vscode": {
 			"extensions": [
 				"Nuxtr.nuxtr-vscode",
-				"octref.vetur"
+				"octref.vetur",
+				"Vue.volar"
 			]
 		}
 	},
