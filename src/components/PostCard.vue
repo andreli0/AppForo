@@ -73,7 +73,7 @@
 
 <script setup>
 const props = defineProps({
-  post_id: String,
+  post_id: Number,
   community_name: String,
   time: String,
   title: String,
