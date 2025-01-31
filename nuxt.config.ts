@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxt/eslint',
   ],
+  ssr: false,
   devtools: { enabled: true },
   srcDir: 'src',
   compatibilityDate: '2024-04-03',

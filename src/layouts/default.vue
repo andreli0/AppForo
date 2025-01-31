@@ -137,13 +137,10 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-
 const { auth } = useSupabaseClient()
 const hash_login = ref(0)
 const hash_register = ref(0)
-const drawer = ref(false)
-const isMounted = ref(false)
+const drawer = ref(true)
 const btnLogin = ref(null)
 const btnRegister = ref(null)
 const open = ref(['Users'])
@@ -185,10 +182,6 @@ const items = reactive({
 })
 
 const { mobile, mdAndUp, mobileBreakpoint, thresholds } = useDisplay()
-
-onMounted(() => {
-  isMounted.value = true
-})
 
 watch(() => drawer, () => (drawer.value = false))
 
